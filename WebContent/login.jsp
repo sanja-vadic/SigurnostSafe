@@ -5,12 +5,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login Page Safe</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 	<h3>Safe application</h3>
 	<form action="" method="POST">
-		<input type="text" name="username" placeholder="Username..."><br />
-		<input type="password" name="password" placeholder="Password..."><br />
+		<input type="text" name="username" placeholder="Username..." id="loginUsername"><br />
+		<input type="password" name="password" placeholder="Password..." id="loginPassword"><br />
 		<input type="submit">
 	</form>
 </body>
