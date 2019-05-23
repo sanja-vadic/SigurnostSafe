@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.etfbl.sanja.dto.User;
+import net.etfbl.sanja.mysql.UserMySql;
 
 /**
  * Servlet implementation class LoginServlet
@@ -28,7 +29,8 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		System.out.println(new UserMySql().checkCredentials("admin", "p@ssword"));
+		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -37,7 +39,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 		doGet(request, response);
 	}
 
