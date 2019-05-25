@@ -1,8 +1,8 @@
 package net.etfbl.sanja.ids;
 
 public class IDSManager {
-
-	public static boolean checkSQL(String parameter) {
+	
+	public static boolean checkSQLI(String parameter) {
 		boolean contains = false;
 		String parameterLowerCase = parameter.toLowerCase();
 		//treba ubaciti sa if-om

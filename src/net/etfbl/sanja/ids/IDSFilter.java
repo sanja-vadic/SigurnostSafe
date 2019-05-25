@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet Filter implementation class IDSFilter
  */
-@WebFilter("/IDSFilter")
+@WebFilter(filterName = "/IDSFilter", urlPatterns = "/*")
 public class IDSFilter implements Filter {
 
     /**
@@ -40,18 +40,26 @@ public class IDSFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		System.out.println("IDS Filter");
 		HttpServletRequest req = (HttpServletRequest) request;
 		
-		String clientAddress = request.getRemoteAddr();
+		IDS ids = new IDS(req);
+		Thread thread = new Thread(ids);
+		thread.start();
 		
-		Map<String, String[]> map = req.getParameterMap();
-        Set<Entry<String, String[]>> set = map.entrySet();
-        Iterator<Entry<String, String[]>> iterator = set.iterator();
+		chain.doFilter(request, response);
+		
+		//String clientAddress = request.getRemoteAddr();
+//		Map<String, String[]> map = req.getParameterMap();
+//		for(Map.Entry<String, String[]> entry: map.entrySet()) {
+//			entry.getKey();
+//			entry.getValue();
+//			
+//		}
+//        Set<Entry<String, String[]>> set = map.entrySet();
+//        Iterator<Entry<String, String[]>> iterator = set.iterator();
         
-        IDS ids = new IDS(map, clientAddress);
-        Thread thread = new Thread(ids);
         //razliciti tredovi upisuju u isti fajl
-        thread.start();
 
       /*      while(iterator.hasNext()){
 
@@ -70,9 +78,8 @@ public class IDSFilter implements Filter {
                 }
             }*/
             
-            HttpServletResponse res = (HttpServletResponse) response;
 		
-		//chain.doFilter(request, response);
+		
 	}
 
 	/**

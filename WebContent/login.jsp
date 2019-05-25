@@ -9,7 +9,7 @@
 </head>
 <body>
 	<h3>Safe application</h3>
-	<form action="" method="POST">
+	<form action="LoginServlet" method="POST">
 		<input type="text" name="username" placeholder="Username..." id="loginUsername"><br />
 		<input type="password" name="password" placeholder="Password..." id="loginPassword"><br />
 		<input type="submit">
