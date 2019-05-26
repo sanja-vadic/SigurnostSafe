@@ -44,5 +44,35 @@ public class UserMySql implements UserDAO {
 		
 		return user;
 	}
+	
+	@Override
+	public boolean insert(User user) {
+		String query = "INSERT INTO users (firstname, lastname, username, password, age) VALUES (?, ?, ?, ?, ?)";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean isOk = false;
+		
+		try {
+			conn = DBManager.getConnection();
+			
+			ps = conn.prepareStatement(query);
+			ps.setString(1, user.getFirstname());
+			ps.setString(2, user.getLastname());
+			ps.setString(3, user.getUsername());
+			ps.setString(4, user.getPassword());
+			ps.setInt(5, user.getAge());
+			isOk = ps.execute();
+
+			ps.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			isOk = false;
+		}
+		
+		return isOk;
+	}
+
 
 }
