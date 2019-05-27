@@ -31,7 +31,7 @@ public class IDS implements Runnable {
 			
 			Iterator<Map.Entry<String, String[]>> iterator = null;
 			for (iterator = request.getParameterMap().entrySet().iterator(); iterator.hasNext();) {
-				System.out.println("usao");
+				//System.out.println("usao");
 				Map.Entry<String, String[]> parameterEntry = iterator.next();
 				String parameterKey = new String(parameterEntry.getKey());
 				String[] parameterValues = new String[parameterEntry.getValue().length];
@@ -107,24 +107,34 @@ public class IDS implements Runnable {
 			LogManager.multipleLog(messages);
 		}
 
-		// while(iterator.hasNext()){
-		//
-		// Map.Entry<String,String[]> entry =
-		// (Map.Entry<String,String[]>)iterator.next();
-		//
-		// String key = entry.getKey();
-		// String[] value = entry.getValue();
-		//
-		// System.out.println("-----> KEY = " + key);
-		//
-		// for(int i = 0; i < value.length; i++) {
-		// if(IDSManager.checkSQL(value[i])) {
-		// System.out.println("DESIO SE NAPAD sa adrese: " + clientAddress);
-		// }
-		// System.out.println("-----> VALUE = " + value[i]);
-		// }
-		// }
-
+	}
+	
+	private LogMessage logMessageBuilder(String clientAddress, String requestMethod) {
+		LogMessage logMessage = LogMessage.builder()
+				.timestamp(System.currentTimeMillis())
+				.ipAddress(clientAddress)
+				.requestMethod(requestMethod)
+				.build();
+		return logMessage;
 	}
 
 }
+
+
+// while(iterator.hasNext()){
+//
+// Map.Entry<String,String[]> entry =
+// (Map.Entry<String,String[]>)iterator.next();
+//
+// String key = entry.getKey();
+// String[] value = entry.getValue();
+//
+// System.out.println("-----> KEY = " + key);
+//
+// for(int i = 0; i < value.length; i++) {
+// if(IDSManager.checkSQL(value[i])) {
+// System.out.println("DESIO SE NAPAD sa adrese: " + clientAddress);
+// }
+// System.out.println("-----> VALUE = " + value[i]);
+// }
+// }
