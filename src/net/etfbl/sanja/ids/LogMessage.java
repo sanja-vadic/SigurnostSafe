@@ -18,6 +18,6 @@ public class LogMessage {
 	}
 	
 	public enum AttackType {
-		SQLI, XSS, PARAMETER_TAMPERING, HTTP_SLOW
+		SQLI, XSS, PARAMETER_TAMPERING, HTTP_SLOW, BUFFER_OVERFLOW
 	}
 }

@@ -42,6 +42,7 @@ public class IDS implements Runnable {
 					boolean sqliDetected = IDSManager.checkSQLI(parameter);
 					boolean xssDetected = IDSManager.checkXSS(parameter);
 					boolean parameterTamperingDetected = IDSManager.checkParameterTampering(parameterKey, parameter, request.getServletContext());
+					boolean bufferOverflowDetected = IDSManager.checkBufferOverflow(parameterKey, parameter, request.getServletContext());
 					if (sqliDetected) {
 						LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
@@ -68,6 +69,16 @@ public class IDS implements Runnable {
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.PARAMETER_TAMPERING)
+								.data("PARAMS: " + parameterKey + " = " + parameter)
+								.build();
+						messages.add(logMessage);
+					}
+					if (bufferOverflowDetected) {
+						LogMessage logMessage = LogMessage.builder()
+								.timestamp(System.currentTimeMillis())
+								.ipAddress(clientAddress)
+								.requestMethod(requestMethod)
+								.attackType(AttackType.BUFFER_OVERFLOW)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
 								.build();
 						messages.add(logMessage);
@@ -119,22 +130,3 @@ public class IDS implements Runnable {
 	}
 
 }
-
-
-// while(iterator.hasNext()){
-//
-// Map.Entry<String,String[]> entry =
-// (Map.Entry<String,String[]>)iterator.next();
-//
-// String key = entry.getKey();
-// String[] value = entry.getValue();
-//
-// System.out.println("-----> KEY = " + key);
-//
-// for(int i = 0; i < value.length; i++) {
-// if(IDSManager.checkSQL(value[i])) {
-// System.out.println("DESIO SE NAPAD sa adrese: " + clientAddress);
-// }
-// System.out.println("-----> VALUE = " + value[i]);
-// }
-// }
