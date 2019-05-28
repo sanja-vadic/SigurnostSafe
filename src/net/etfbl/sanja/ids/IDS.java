@@ -44,43 +44,59 @@ public class IDS implements Runnable {
 					boolean parameterTamperingDetected = IDSManager.checkParameterTampering(parameterKey, parameter, request.getServletContext());
 					boolean bufferOverflowDetected = IDSManager.checkBufferOverflow(parameterKey, parameter, request.getServletContext());
 					if (sqliDetected) {
-						LogMessage logMessage = LogMessage.builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+								.attackType(AttackType.SQLI)
+								.data("PARAMS: " + parameterKey + " = " + parameter)
+								.build();
+						/*LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.SQLI)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
-								.build();
+								.build();*/
 						messages.add(logMessage);
 					}
 					if (xssDetected) {
-						LogMessage logMessage = LogMessage.builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+								.attackType(AttackType.XSS)
+								.data("PARAMS: " + parameterKey + " = " + parameter)
+								.build();
+						/*LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.XSS)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
-								.build();
+								.build();*/
 						messages.add(logMessage);
 					}
 					if (parameterTamperingDetected) {
-						LogMessage logMessage = LogMessage.builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+								.attackType(AttackType.PARAMETER_TAMPERING)
+								.data("PARAMS: " + parameterKey + " = " + parameter)
+								.build();
+						/*LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.PARAMETER_TAMPERING)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
-								.build();
+								.build();*/
 						messages.add(logMessage);
 					}
 					if (bufferOverflowDetected) {
-						LogMessage logMessage = LogMessage.builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+								.attackType(AttackType.BUFFER_OVERFLOW)
+								.data("PARAMS: " + parameterKey + " = " + parameter)
+								.build();
+						/*LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.BUFFER_OVERFLOW)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
-								.build();
+								.build();*/
 						messages.add(logMessage);
 					}
 				}
@@ -93,23 +109,31 @@ public class IDS implements Runnable {
 					boolean sqliDetected = IDSManager.checkSQLI(cookieValue);
 					boolean xssDetected = IDSManager.checkXSS(cookieValue);
 					if (sqliDetected) {
-						LogMessage logMessage = LogMessage.builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+								.attackType(AttackType.SQLI)
+								.data("COOKIE: " + cookieName + " = " + cookieValue)
+								.build();
+						/*LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.SQLI)
 								.data("COOKIE: " + cookieName + " = " + cookieValue)
-								.build();
+								.build();*/
 						messages.add(logMessage);
 					}
 					if (xssDetected) {
-						LogMessage logMessage = LogMessage.builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+								.attackType(AttackType.XSS)
+								.data("COOKIE: " + cookieName + " = " + cookieValue)
+								.build();
+						/*LogMessage logMessage = LogMessage.builder()
 								.timestamp(System.currentTimeMillis())
 								.ipAddress(clientAddress)
 								.requestMethod(requestMethod)
 								.attackType(AttackType.XSS)
 								.data("COOKIE: " + cookieName + " = " + cookieValue)
-								.build();
+								.build();*/
 						messages.add(logMessage);
 					}
 				}
