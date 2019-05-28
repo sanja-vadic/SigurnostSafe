@@ -44,8 +44,12 @@ public class IDSFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("IDS Filter");
 		HttpServletRequest req = (HttpServletRequest) request;
+		System.out.println("IDS Filter: " + req.getRequestURL().toString());
+		
+		if("http://localhost:8080/SigurnostSafe/EmptyLogServlet".equals(req.getRequestURL().toString())) {
+			
+		}
 		
 		Request requestModel = new Request(req);
 		IDS ids = new IDS(requestModel);
