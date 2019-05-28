@@ -47,10 +47,6 @@ public class IDSFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		System.out.println("IDS Filter: " + req.getRequestURL().toString());
 		
-		if("http://localhost:8080/SigurnostSafe/EmptyLogServlet".equals(req.getRequestURL().toString())) {
-			
-		}
-		
 		Request requestModel = new Request(req);
 		IDS ids = new IDS(requestModel);
 		Thread thread = new Thread(ids);

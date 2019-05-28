@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONObject;
+
 import net.etfbl.sanja.ids.LogMessage.AttackType;
 import net.etfbl.sanja.model.Request;
 
@@ -28,6 +30,20 @@ public class IDS implements Runnable {
 			List<LogMessage> messages = new ArrayList<>();
 
 			String clientAddress = request.getIpAddress();
+			if (request.getUrl().contains("EmptyLogServlet")) {
+				try {
+					System.out.println("JSON: " + request.getBody());
+					JSONObject root = new JSONObject(request.getBody());
+
+					LogMessage logMessage = logMessageBuilder(root.getString("clientAddress"),
+							root.getString("requestMethod"))
+									.attackType(AttackType.valueOf(root.getString("attackType").toUpperCase()))
+									.build();
+					messages.add(logMessage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			
 			Iterator<Map.Entry<String, String[]>> iterator = null;
 			for (iterator = request.getParameterMap().entrySet().iterator(); iterator.hasNext();) {
@@ -44,7 +60,7 @@ public class IDS implements Runnable {
 					boolean parameterTamperingDetected = IDSManager.checkParameterTampering(parameterKey, parameter, request.getServletContext());
 					boolean bufferOverflowDetected = IDSManager.checkBufferOverflow(parameterKey, parameter, request.getServletContext());
 					if (sqliDetected) {
-						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.SQLI)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
 								.build();
@@ -58,7 +74,7 @@ public class IDS implements Runnable {
 						messages.add(logMessage);
 					}
 					if (xssDetected) {
-						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.XSS)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
 								.build();
@@ -72,7 +88,7 @@ public class IDS implements Runnable {
 						messages.add(logMessage);
 					}
 					if (parameterTamperingDetected) {
-						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.PARAMETER_TAMPERING)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
 								.build();
@@ -86,7 +102,7 @@ public class IDS implements Runnable {
 						messages.add(logMessage);
 					}
 					if (bufferOverflowDetected) {
-						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.BUFFER_OVERFLOW)
 								.data("PARAMS: " + parameterKey + " = " + parameter)
 								.build();
@@ -109,7 +125,7 @@ public class IDS implements Runnable {
 					boolean sqliDetected = IDSManager.checkSQLI(cookieValue);
 					boolean xssDetected = IDSManager.checkXSS(cookieValue);
 					if (sqliDetected) {
-						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.SQLI)
 								.data("COOKIE: " + cookieName + " = " + cookieValue)
 								.build();
@@ -123,7 +139,7 @@ public class IDS implements Runnable {
 						messages.add(logMessage);
 					}
 					if (xssDetected) {
-						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod).builder()
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.XSS)
 								.data("COOKIE: " + cookieName + " = " + cookieValue)
 								.build();
@@ -144,13 +160,11 @@ public class IDS implements Runnable {
 
 	}
 	
-	private LogMessage logMessageBuilder(String clientAddress, String requestMethod) {
-		LogMessage logMessage = LogMessage.builder()
+	private LogMessage.LogMessageBuilder logMessageBuilder(String clientAddress, String requestMethod) {
+		return LogMessage.builder()
 				.timestamp(System.currentTimeMillis())
 				.ipAddress(clientAddress)
-				.requestMethod(requestMethod)
-				.build();
-		return logMessage;
+				.requestMethod(requestMethod);
 	}
 
 }
