@@ -37,7 +37,10 @@ public class IDSManager {
 		boolean contains = false;
 		String parameterLowerCase = parameter.toLowerCase();
 		if (parameterLowerCase.contains("<script>") || parameterLowerCase.contains("</script>")
-				|| parameterLowerCase.contains("eval")) {
+				|| parameterLowerCase.contains("eval")
+				|| parameterLowerCase.contains("javascript:")
+				|| parameterLowerCase.contains("onload")
+				) {
 			contains = true;
 		}
 
