@@ -22,6 +22,7 @@ public class IDSManager {
 		if (parameterLowerCase.contains("select *") || parameterLowerCase.contains("select from")
 				|| parameterLowerCase.contains("union select") || parameterLowerCase.contains("order by")
 				|| parameterLowerCase.contains("insert into") 
+				|| parameterLowerCase.contains("create") 
 				|| parameterLowerCase.contains("group by") || parameterLowerCase.contains("delete from")
 				|| parameterLowerCase.contains("or 1=1") || parameterLowerCase.contains("or '1'='1'")
 				|| parameterLowerCase.contains("drop database") || parameterLowerCase.contains("drop table")
