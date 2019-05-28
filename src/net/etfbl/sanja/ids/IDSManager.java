@@ -21,6 +21,8 @@ public class IDSManager {
 		// treba ubaciti sa if-om
 		if (parameterLowerCase.contains("select *") || parameterLowerCase.contains("select from")
 				|| parameterLowerCase.contains("union select") || parameterLowerCase.contains("order by")
+				|| parameterLowerCase.contains("insert into") 
+				|| parameterLowerCase.contains("create") 
 				|| parameterLowerCase.contains("group by") || parameterLowerCase.contains("delete from")
 				|| parameterLowerCase.contains("or 1=1") || parameterLowerCase.contains("or '1'='1'")
 				|| parameterLowerCase.contains("drop database") || parameterLowerCase.contains("drop table")
@@ -35,7 +37,10 @@ public class IDSManager {
 		boolean contains = false;
 		String parameterLowerCase = parameter.toLowerCase();
 		if (parameterLowerCase.contains("<script>") || parameterLowerCase.contains("</script>")
-				|| parameterLowerCase.contains("eval")) {
+				|| parameterLowerCase.contains("eval")
+				|| parameterLowerCase.contains("javascript:")
+				|| parameterLowerCase.contains("onload")
+				) {
 			contains = true;
 		}
 
