@@ -10,8 +10,8 @@
 <body>
 	<h3>Safe application</h3>
 	<form action="LoginServlet" method="POST">
-		<input type="text" name="username" placeholder="Username..." id="loginUsername"><br />
-		<input type="password" name="password" placeholder="Password..." id="loginPassword"><br />
+		<input type="text" name="loginUsername" placeholder="Username..." id="loginUsername"><br />
+		<input type="password" name="loginPassword" placeholder="Password..." id="loginPassword"><br />
 		<input type="submit">
 	</form>
 </body>

@@ -62,8 +62,8 @@ public class UserMySql implements UserDAO {
 			ps.setString(3, user.getUsername());
 			ps.setString(4, user.getPassword());
 			ps.setInt(5, user.getAge());
-			isOk = ps.execute();
-
+			ps.execute();
+			isOk = true;
 			ps.close();
 			conn.close();
 		} catch (Exception e) {

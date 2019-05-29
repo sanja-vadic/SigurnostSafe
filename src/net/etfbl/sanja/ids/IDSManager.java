@@ -22,7 +22,10 @@ public class IDSManager {
 		// nasla sam neki reqex \b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT(INTO){0,1}|MERGE|SELECT|UPDATE|UNION(ALL){0,1})\b
 		//\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b
 		// '(''|[^'])*'
+		
+		//NIJE DOBRO jer ne pronadje npr ' or 1=1 #
 		if (parameterLowerCase.contains("select *") || parameterLowerCase.contains("select from")
+				|| parameterLowerCase.contains("select") 
 				|| parameterLowerCase.contains("union select") || parameterLowerCase.contains("order by")
 				|| parameterLowerCase.contains("insert into") 
 				|| parameterLowerCase.contains("create") 

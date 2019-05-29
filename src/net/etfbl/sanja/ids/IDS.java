@@ -34,13 +34,12 @@ public class IDS implements Runnable {
 			String clientAddress = request.getIpAddress();
 			if (request.getUrl().contains("EmptyLogServlet")) {
 				try {
-					System.out.println("JSON: " + request.getBody());
-//					JSONObject root = new JSONObject(request.getBody());
-					JSONObject root = new JSONObject(request.getBody());
-
-					LogMessage logMessage = logMessageBuilder(root.getString("clientAddress"),
-							root.getString("requestMethod"))
-									.attackType(AttackType.valueOf(root.getString("attackType").toUpperCase()))
+					String ip = request.getParameterMap().get("clientAddress")[0];
+					String method = request.getParameterMap().get("requestMethod")[0];
+					String type = request.getParameterMap().get("attackType")[0];
+					LogMessage logMessage = logMessageBuilder(ip, method)
+									.attackType(AttackType.valueOf(type.toUpperCase()))
+									.data("")
 									.build();
 					messages.add(logMessage);
 				} catch (Exception e) {
@@ -50,7 +49,6 @@ public class IDS implements Runnable {
 			
 			Iterator<Map.Entry<String, String[]>> iterator = null;
 			for (iterator = request.getParameterMap().entrySet().iterator(); iterator.hasNext();) {
-				//System.out.println("usao");
 				Map.Entry<String, String[]> parameterEntry = iterator.next();
 				String parameterKey = new String(parameterEntry.getKey());
 				String[] parameterValues = new String[parameterEntry.getValue().length];
@@ -99,8 +97,12 @@ public class IDS implements Runnable {
 				for (Cookie cookie : request.getCookies()) {
 					String cookieName = cookie.getName();
 					String cookieValue = cookie.getValue();
+					System.out.println("Cookie name: " + cookieName);
+					System.out.println("Cookie value: " + cookieValue);
 					boolean sqliDetected = IDSManager.checkSQLI(cookieValue);
 					boolean xssDetected = IDSManager.checkXSS(cookieValue);
+					boolean parameterTamperingDetected = IDSManager.checkParameterTampering(cookieName, cookieValue, servletContext);
+					boolean bufferOverflowDetected = IDSManager.checkBufferOverflow(cookieName, cookieValue, servletContext);
 					if (sqliDetected) {
 						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.SQLI)
@@ -111,6 +113,20 @@ public class IDS implements Runnable {
 					if (xssDetected) {
 						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
 								.attackType(AttackType.XSS)
+								.data("COOKIE: " + cookieName + " = " + cookieValue)
+								.build();
+						messages.add(logMessage);
+					}
+					if (parameterTamperingDetected) {
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
+								.attackType(AttackType.PARAMETER_TAMPERING)
+								.data("COOKIE: " + cookieName + " = " + cookieValue)
+								.build();
+						messages.add(logMessage);
+					}
+					if (bufferOverflowDetected) {
+						LogMessage logMessage = logMessageBuilder(clientAddress, requestMethod)
+								.attackType(AttackType.BUFFER_OVERFLOW)
 								.data("COOKIE: " + cookieName + " = " + cookieValue)
 								.build();
 						messages.add(logMessage);

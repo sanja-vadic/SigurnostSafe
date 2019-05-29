@@ -53,8 +53,14 @@ public class RegistrationServlet extends HttpServlet {
 		String lastname = request.getParameter("lastname");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-
-		int age = Integer.parseInt(request.getParameter("age"));
+		int age = 0;
+		try {
+			age = Integer.parseInt(request.getParameter("age"));
+		} catch (Exception e) {
+			System.out.println("Error with parsing");
+			response.getWriter().println("Your input is recognized as Parameter Tampering attack.");
+			return;
+		}
 
 		map.put("firstname", firstname);
 		map.put("lastname", lastname);
@@ -70,6 +76,9 @@ public class RegistrationServlet extends HttpServlet {
 			String parameterValue = new String(parameterEntry.getValue());
 
 			parameterTampering = IDSManager.checkParameterTampering(parameterKey, parameterValue, getServletContext());
+			if(parameterTampering == true) {
+				break;
+			}
 		}
 
 		if (!parameterTampering) {
