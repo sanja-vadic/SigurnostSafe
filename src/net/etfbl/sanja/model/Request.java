@@ -46,6 +46,8 @@ public class Request {
 		}
 		try {
 			this.body = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+			System.out.println("REQUEST " + req.getReader().readLine());
+			System.out.println("REQUEST MODEL body: " + this.body);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
