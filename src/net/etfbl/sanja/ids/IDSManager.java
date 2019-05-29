@@ -36,6 +36,7 @@ public class IDSManager {
 		return contains;
 	}
 
+	//(\b)(on\S+)(\s*)=|javascript|(<\s*)(\/*)script
 	public static boolean checkXSS(String parameter) {
 		boolean contains = false;
 		String parameterLowerCase = parameter.toLowerCase();
