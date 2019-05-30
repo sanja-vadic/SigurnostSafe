@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.etfbl.sanja.dto.User;
+import net.etfbl.sanja.ids.IDSManager;
 import net.etfbl.sanja.mysql.UserMySql;
 
 /**
@@ -40,8 +41,16 @@ public class LoginServlet extends HttpServlet {
 		String username = request.getParameter("loginUsername");
 		String password = request.getParameter("loginPassword");
 
+		boolean isUsernameSQLI = IDSManager.checkSQLI(username);
+		boolean isPasswordSQLI = IDSManager.checkSQLI(password);
+		
+		if(isUsernameSQLI || isPasswordSQLI) {
+			response.getWriter().print("Ovaj zahtjev je identifikovan kao SQLI");
+			return;
+		}
+		
 		UserMySql userMySql = new UserMySql();
-
+		
 		User user = null;
 		try {
 			user = userMySql.checkCredentials(username, password);

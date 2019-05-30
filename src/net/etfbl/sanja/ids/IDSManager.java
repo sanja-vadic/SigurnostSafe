@@ -63,14 +63,14 @@ public class IDSManager {
 			contains = true;
 		}*/
 		
-		/*String parameterLowerCase = parameter.toLowerCase();
+		String parameterLowerCase = parameter.toLowerCase();
 		if (parameterLowerCase.contains("<script>") || parameterLowerCase.contains("</script>")
 				|| parameterLowerCase.contains("eval")
 				|| parameterLowerCase.contains("javascript:")
 				|| parameterLowerCase.contains("onload")
 				) {
 			contains = true;
-		}*/
+		}
 
 		return contains;
 	}
