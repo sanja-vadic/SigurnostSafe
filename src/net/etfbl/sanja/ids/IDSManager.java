@@ -14,6 +14,8 @@ import javax.servlet.ServletContext;
 import lombok.val;
 
 public class IDSManager {
+	private static final String SQLI_REGEX = "(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT(INTO){0,1}|MERGE|SELECT|UPDATE|UNION(ALL){0,1})";
+	private static final String XSS_REGEX = "(\\b)(on\\S+)(\\s*)=|javascript|(<\\s*)(\\/*)script";
 
 	public static boolean checkSQLI(String parameter) {
 		boolean contains = false;
@@ -24,6 +26,8 @@ public class IDSManager {
 		// '(''|[^'])*'
 		
 		//NIJE DOBRO jer ne pronadje npr ' or 1=1 #
+		
+		
 		if (parameterLowerCase.contains("select *") || parameterLowerCase.contains("select from")
 				|| parameterLowerCase.contains("select") 
 				|| parameterLowerCase.contains("union select") || parameterLowerCase.contains("order by")
@@ -35,6 +39,15 @@ public class IDSManager {
 				|| parameterLowerCase.contains("update")) {
 			contains = true;
 		}
+		
+		
+		
+	/*	Pattern pattern = Pattern.compile(SQLI_REGEX);
+		Matcher matcher = pattern.matcher(parameter);
+
+		if (matcher.matches()) {
+			contains = true;
+		}*/
 
 		return contains;
 	}
@@ -42,14 +55,22 @@ public class IDSManager {
 	//(\b)(on\S+)(\s*)=|javascript|(<\s*)(\/*)script
 	public static boolean checkXSS(String parameter) {
 		boolean contains = false;
-		String parameterLowerCase = parameter.toLowerCase();
+		
+		/*Pattern pattern = Pattern.compile(XSS_REGEX);
+		Matcher matcher = pattern.matcher(parameter);
+
+		if (matcher.matches()) {
+			contains = true;
+		}*/
+		
+		/*String parameterLowerCase = parameter.toLowerCase();
 		if (parameterLowerCase.contains("<script>") || parameterLowerCase.contains("</script>")
 				|| parameterLowerCase.contains("eval")
 				|| parameterLowerCase.contains("javascript:")
 				|| parameterLowerCase.contains("onload")
 				) {
 			contains = true;
-		}
+		}*/
 
 		return contains;
 	}
